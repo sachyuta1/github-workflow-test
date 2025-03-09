@@ -13,7 +13,7 @@ func VersionRoute(router *gin.RouterGroup) {
 		version.GET("/version", func(c *gin.Context) {
 			// Directly respond with the current version information
 			c.JSON(http.StatusOK, gin.H{
-				"version": "v0.0.0", // Update with your actual version
+				"version": "v0.0.2", // Update with your actual version
 				"message": "API version information",
 			})
 		})

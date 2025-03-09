@@ -17,7 +17,7 @@ on:
 
 jobs:
   determine-version:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     outputs:
       new_version: ${{ steps.version.outputs.NEW_VERSION }}
       release_type: ${{ steps.version.outputs.RELEASE_TYPE }}
@@ -68,7 +68,7 @@ jobs:
 
   build-and-release:
     needs: determine-version
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -141,7 +141,7 @@ jobs:
 
   build-docker-image:
     needs: determine-version
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code

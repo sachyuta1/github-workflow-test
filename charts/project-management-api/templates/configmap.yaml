@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  labels:
+    {{- include "project-management-api.labels" . | nindent 4 }}
+data:
+  DATABASE_HOST: {{ .Values.DATABASE_HOST | quote }}
+  DATABASE_PORT: {{ .Values.DATABASE_PORT | quote }}
+  DATABASE_NAME: {{ .Values.DATABASE_NAME | quote }}
+  USE_REDIS: {{ .Values.USE_REDIS | quote }}
+  REDIS_HOST: {{ .Values.REDIS_HOST | quote }}
+  REDIS_PORT: {{ .Values.REDIS_PORT | quote }}
+  NATS_HOST: {{ .Values.NATS_HOST | quote }}
+  NATS_PORT: {{ .Values.NATS_PORT | quote }}
+  USE_MINIO: {{ .Values.USE_MINIO | quote }}
+  MINIO_ENDPOINT: {{ .Values.MINIO_ENDPOINT | quote }}
+  MINIO_SSL: {{ .Values.MINIO_SSL | quote }}
+  MODE: {{ .Values.MODE | quote }}
+  CONTAINER_PORT: {{ .Values.CONTAINER_PORT | quote }}
+  SERVER_HOST: {{ .Values.SERVER_HOST | quote}}

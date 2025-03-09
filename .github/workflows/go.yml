@@ -1,0 +1,67 @@
+name: Go Lint
+
+on:
+  push:
+    branches:
+      - '**'  # Triggers on push to any branch
+  pull_request:
+    branches:
+      - main  # Triggers on pull requests to the main branch
+
+jobs:
+  go-lint:
+    #runs-on: ubuntu-latest
+    runs-on: self-hosted
+
+    steps:
+      # Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Set up Go (Go 1.23 as an example)
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.23'
+
+      # Install golint (force Go Modules)
+      - name: Install golint
+        env:
+          GO111MODULE: on  # Explicitly set GO111MODULE to on
+        run: |
+          echo "Installing golint with Go Modules"
+          go install golang.org/x/lint/golint@latest
+          echo "Golint installation complete."
+
+      # Run golint on all Go files
+      - name: Run golint
+        run: |
+          echo "Finding Go files to lint..."
+          files=$(find . -name '*.go' | grep -v vendor)
+          echo "Go files found: $files"
+          
+          if [ -z "$files" ]; then
+            echo "No Go files found to lint."
+            exit 0
+          fi
+
+          lint_errors=0
+          for file in $files; do
+            echo "Running golint on $file"
+            golint_output=$(golint "$file")
+          
+            if [ -n "$golint_output" ]; then
+              echo "Golint issues found in $file"
+              echo "$golint_output"
+              lint_errors=1
+            else
+              echo "No issues in $file"
+            fi
+          done
+
+          if [ "$lint_errors" -ne 0 ]; then
+            echo "Linting failed due to errors."
+            exit 1
+          fi
+
+          echo "Linting passed successfully."

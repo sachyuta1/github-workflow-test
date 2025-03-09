@@ -1,0 +1,59 @@
+services:
+  nats:
+    image: docker.io/nats:latest
+    container_name: nats-server
+    ports:
+      - "4222:4222"   # NATS client port
+      - "8222:8222"   # NATS monitoring port (optional)
+    environment:
+      NATS_USER: ${NATS_USERNAME}
+      NATS_PASSWORD: ${NATS_PASSWORD}
+    command: ["--user", "${NATS_USER}", "--pass", "${NATS_PASSWORD}"]
+    networks:
+      - app-network
+
+  postgres:
+    image: docker.io/library/postgres:latest
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "${DATABASE_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  redis:
+    image: docker.io/library/redis:latest
+    ports:
+      - "${REDIS_PORT}:6379"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    networks:
+      - app-network
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+
+  minio:
+    image: docker.io/minio/minio:latest
+    container_name: minio-server
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - app-network
+    command: ["server", "/data", "--console-address", ":9001"]
+
+volumes:
+  postgres_data:
+  minio_data:
+
+networks:
+  app-network:
+    driver: bridge

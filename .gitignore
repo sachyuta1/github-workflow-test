@@ -1,0 +1,46 @@
+# Go binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Vendor directory
+/vendor/
+
+# Build directories
+/bin/
+/obj/
+
+# Log directories
+/logs/
+
+# Go workspace files
+*.out
+*.test
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*~.ninja_deps
+*.sublime-project
+*.sublime-workspace
+*.iml
+.env
+
+# MacOS specific files
+.DS_Store
+
+# Log files
+*.log
+
+# Coverage files
+coverage.out
+
+
+# Temporary files
+tmp/
+temp/
+export.sh 
